@@ -3,11 +3,9 @@ extends Node2D
 @onready var main: Node2D = $Main
 
 func _ready() -> void:
+	test_timer_start()
+
+func test_timer_start():
 	main.start_timer()
 	await get_tree().process_frame
-	print(test_timer_start(main.get_ticks()))
-
-func test_timer_start(tick):
-	if (tick > 1):
-		return true
-	return false
+	assert(main.get_ticks() > 0)
