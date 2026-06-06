@@ -8,15 +8,18 @@ func _ready() -> void:
 	test_timer_start()
 	test_timer_precision()
 	test_timer_stops()
+	test_timer_splits()
 
 func create_new_timer() -> void:
+	if timer:
+		timer.free()
 	timer = MAIN.instantiate()
 	add_child(timer)
 
 func test_timer_start() -> void:
 	create_new_timer()
 	timer.start_timer()
-	await get_tree().process_frame
+	await get_tree().physics_frame
 	assert(timer.get_ticks() > 0, "Timer didn't start!")
 
 func test_timer_precision() -> void:
@@ -32,9 +35,10 @@ func test_timer_precision() -> void:
 func test_timer_stops() -> void:
 	create_new_timer()
 	timer.start_timer()
+	await get_tree().physics_frame
 	timer.stop_timer()
 	var time_1 = timer.get_ticks()
-	await get_tree().process_frame
+	await get_tree().physics_frame
 	var time_2 = timer.get_ticks()
 	assert(time_1 == time_2, "Timer didnt stop")
 

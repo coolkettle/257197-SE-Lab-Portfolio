@@ -5,6 +5,7 @@ var start_timestamp: int
 var current_timestamp: int
 var stop_timestamp: int
 var stopped: bool = false
+var splits: Array[int]
 
 func start_timer() -> void:
 	stopped = false
@@ -15,12 +16,12 @@ func get_ticks() -> int:
 		return Time.get_ticks_usec() - start_timestamp
 	return stop_timestamp - start_timestamp
 
-func _ready() -> void:
-	start_timestamp = Time.get_ticks_usec()
-
 func stop_timer() -> void:
 	stopped = true
 	stop_timestamp = Time.get_ticks_usec()
+	
+func add_split() -> void:
+	splits.append(Time.get_ticks_usec())
 
 #func _process(delta: float) -> void:
 	#current_timestamp = Time.get_ticks_usec()
