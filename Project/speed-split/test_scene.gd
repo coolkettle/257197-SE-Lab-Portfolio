@@ -9,6 +9,7 @@ func _ready() -> void:
 	test_timer_precision()
 	test_timer_stops()
 	test_timer_splits()
+	test_export_timer_to_csv()
 
 func create_new_timer() -> void:
 	if timer:
@@ -51,3 +52,15 @@ func test_timer_splits() -> void:
 	timer.add_split()
 	await get_tree().physics_frame
 	assert(timer.splits.size() == 2, "Splits were not created")
+	
+func test_export_timer_to_csv() -> void:
+	create_new_timer()
+	timer.start_timer()
+	await get_tree().physics_frame
+	timer.add_split()
+	await get_tree().physics_frame
+	timer.add_split()
+	timer.stop_timer()
+	var file: FileAccess = timer.export_to_csv("testfile.csv")
+	assert(not file.get_as_text().is_empty(), "file is empty ")
+	
