@@ -2,7 +2,6 @@ extends Node2D
 
 @onready var label: Label = %Label
 var start_timestamp: int
-var current_timestamp: int
 var stop_timestamp: int
 var stopped: bool = false
 var splits: Array[int]
@@ -19,9 +18,24 @@ func get_ticks() -> int:
 func stop_timer() -> void:
 	stopped = true
 	stop_timestamp = Time.get_ticks_usec()
-	
+
 func add_split() -> void:
 	splits.append(Time.get_ticks_usec())
+
+func export_to_csv(file_name: String) -> FileAccess:
+	var contents: Array[String]
+	contents.append(str(start_timestamp))
+	for i in splits:
+		contents.append(str(i))
+	if stopped:
+		contents.append(str(stop_timestamp))
+	else:
+		contents.append(str(Time.get_ticks_usec()))
+	contents.append(str(get_ticks()))
+	
+	var file: FileAccess = FileAccess.open(file_name, FileAccess.WRITE_READ)
+	file.store_csv_line(contents)
+	return file
 
 #func _process(delta: float) -> void:
 	#current_timestamp = Time.get_ticks_usec()
