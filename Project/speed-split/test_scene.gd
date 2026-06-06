@@ -7,6 +7,7 @@ var timer: Node2D
 func _ready() -> void:
 	test_timer_start()
 	test_timer_precision()
+	test_timer_stops()
 
 func create_new_timer() -> void:
 	timer = MAIN.instantiate()
@@ -27,3 +28,12 @@ func test_timer_precision() -> void:
 		pass
 	print(timer.get_ticks())
 	assert(abs(timer.get_ticks() - 1000000) < 1000, "Timer is more than 1ms imprecise!")
+	
+func test_timer_stops() -> void:
+	create_new_timer()
+	timer.start_timer()
+	timer.stop_timer()
+	var time_1 = timer.get_ticks()
+	await get_tree().process_frame
+	var time_2 = timer.get_ticks()
+	assert(time_1 == time_2, "Timer didnt stop")
