@@ -37,3 +37,13 @@ func test_timer_stops() -> void:
 	await get_tree().process_frame
 	var time_2 = timer.get_ticks()
 	assert(time_1 == time_2, "Timer didnt stop")
+
+func test_timer_splits() -> void:
+	create_new_timer()
+	timer.start_timer()
+	await get_tree().physics_frame
+	timer.add_split()
+	await get_tree().physics_frame
+	timer.add_split()
+	await get_tree().physics_frame
+	assert(timer.splits.size() == 2, "Splits were not created")
